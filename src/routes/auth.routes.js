@@ -16,14 +16,30 @@ router.post('/register', async (req,res)=>{
 
 
 })
+
+
 router.post('/login', async (req,res)=>{
      const {username, password} = req.body;
-     const isUserExists = await userModel.findOne({
+     const user = await userModel.findOne({
           username:username
      })
-     if(!isUserExists){
-          
+     if(!user){
+          return res.status(401).json({
+               messsage: "user not found..."
+          })
      }
+
+     const isPasswordValid = password == user.password
+
+     if(!isPasswordValid){
+          return res.status(401).json({
+               message: 'Invalid password!'
+          })
+     }
+
+     res.status(200).json({
+          message:'User LogedIn successfully...'
+     })
 })
 
 
